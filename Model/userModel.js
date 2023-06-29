@@ -30,16 +30,28 @@ exports.addUser = (user, callback) => {
 }
 
 
+
 exports.resetPassword = (login) => {
-    const query = 'INSERT INTO login (email, password) VALUES (?,?)';
-    const values = [login.email, login.password];
+    const query = 'UPDATE login SET password = ? WHERE email = ?';
+    const values = [login.password, login.email];
 
     //console.log('user model - reset - values: ',values);
     //console.log('user model - reset - login.password: ',login.password);
     return db.query(query, values);
+
 }
 
-exports.LogIn = (login, callback) => {
+exports.createLogin = (login) => {
+    const query = 'INSERT INTO login (email, password) VALUES (?,?)';
+    const values = [login.email, login.password];
+
+    //console.log('user model - createLogin - values: ',values);
+    //console.log('user model - createLogin - login.password: ',login.password);
+    return db.query(query, values);
+
+}
+
+exports.validateLogIn = (login, callback) => {
     const query = 
         ' SELECT email, password '
         +' FROM login '
@@ -55,7 +67,7 @@ exports.LogIn = (login, callback) => {
         if (err) {
             callback(err, null);
         } else {
-            //console.log('result model login ',result);
+            console.log('result model login ',result);
             callback(null, result);
         }
     });   

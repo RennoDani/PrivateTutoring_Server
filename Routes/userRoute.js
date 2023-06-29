@@ -6,6 +6,9 @@ const router = express.Router();
 router.get('/User',userCtlr.getAllUser);
 router.post('/User', userCtlr.addNewUser);
 
-router.post('/postLogIn',userCtlr.postLogIn);
+router.post('/postLogIn',userCtlr.validateLogIn);
+
+router.post('/postResetPassword',userCtlr.resetPassword);
+
 
 module.exports = router;

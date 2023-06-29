@@ -1,7 +1,8 @@
 const userModel = require('../Model/userModel');
-//const crypto = require('crypto');
 const bcryptjs = require('bcryptjs');
 
+
+//generate and encrypt password 
 function generatePassword() {
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let pass = '';
@@ -11,7 +12,38 @@ function generatePassword() {
         pass += caracteres.charAt(indice);
     }
 
-    return pass;
+    console.log('generatePassword: ', pass);    
+
+    const hashpassword = bcryptjs.hashSync(pass, 10);
+
+    return hashpassword;
+}
+
+
+exports.resetPassword = (req, res, next) => {
+    const newpassword = generatePassword();
+
+    //console.log('resetPassword: ', newpassword);    
+
+    userModel.resetPassword({
+        email: req.body.emailLoginReset,
+        password: newpassword
+    }, (err, result) => {
+        if(err){
+            console.log('Error - Reset Password: ' + err);
+
+            return res.json({
+                message: err,
+                sucess: false
+            });
+        }else{
+            return res.json({
+                message: 'Successfully reset password!',
+                sucess: true
+            });
+        }
+    });
+
 }
 
 exports.getAllUser = (req, res, next) => {
@@ -43,13 +75,11 @@ exports.addNewUser = async (req, res, next) => {
         } else {
             const newpassword = generatePassword();
 
-            console.log('newpassword: ',newpassword);
+            //console.log('newpassword: ', newpassword);    
 
-            const hashpassword = bcryptjs.hashSync(newpassword, 10);
-
-            userModel.resetPassword({
+            userModel.createLogin({
                 email: req.body.emailUser,
-                password: hashpassword
+                password: newpassword
             });
 
             return res.json({
@@ -62,36 +92,62 @@ exports.addNewUser = async (req, res, next) => {
 
 }
 
-exports.postLogIn = async (req, res, next) => {
+
+exports.validateLogIn = async (req, res, next) => {
 
     //console.log('postLogin - crtl - body: ',req.body);
 
-    //userModel.LogIn(req.body, (err, result) => {
-    userModel.LogIn(req.body, (err, result) => {
+    userModel.validateLogIn(req.body, (err, result) => {
         if (err) {
             console.log('Error: ' + err);
             return res.json({
                 message: err,
+                sucess: false,
                 login: false
             });
         } else {
             //if the email validation is empty
             if (result.length <= 0) {
-                return res.json({ message: 'Invalid email or password - not exist', login: false })
+                return res.json({
+                    message: 'Invalid email or password - not exist',
+                    sucess: false,
+                    login: false
+                })
             } else {
 
-                const passwordDecript = bcryptjs.compare(req.body.passwordLogin, result.password);
+                // console.log('postLogin - crtl - body: ',req.body.passwordLogin);
+                // console.log('postLogin - crtl - result.password: ',result[0].password);
 
-                if (passwordDecript) {
-                    return res.json({
-                        message: 'Success',
-                        login: true,
-                        user: result
-                    });
-                }                
+                bcryptjs.compare(req.body.passwordLogin, result[0].password, function (err, isMatch) {
+                    if (err) {
+                        console.error(err);
+
+                        return res.json({
+                            message: 'LogIn - Error ', err,
+                            sucess: false,
+                            login: false
+                        });
+                    }
+
+                    if (isMatch) {
+                        return res.json({
+                            message: 'Success',
+                            sucess: true,
+                            login: true,
+                            user: result
+                        });
+                    } else {
+                        return res.json({
+                            message: 'LogIn - Invalid email or password - not exist',
+                            sucess: false,
+                            login: false
+                        });
+                    }
+                })
             }
         }
 
 
     });
 }
+
