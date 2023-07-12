@@ -15,7 +15,7 @@ const contactRoutes = require('./Routes/contactRoute');
 const userRoutes = require('./Routes/userRoute');
 const authRoutes = require('./Routes/authRoute');
 
-const authCtrl = require('./Controllers/authCtrl');
+
 
 
 db.connect((err) => {
@@ -26,6 +26,10 @@ db.connect((err) => {
 });
 
 
+
+console.log('Middleware ');
+//Middleware - Verify token
+const authCtrl = require('./Controllers/authCtrl');
 app.get('/protected-route', authCtrl.verifyToken, (req, res) => {
 
   console.log('Middleware - req.user: ',req.user);
