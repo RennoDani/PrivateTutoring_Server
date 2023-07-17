@@ -63,12 +63,12 @@ exports.createLogin = (email) => {
 
 exports.resetPassword = (req, res, next) => {
 
-    //console.log('reset password - req.body.emailLoginReset: ', req.body.emailLoginReset);
+    //console.log('reset password - req.body: ', req.body);
 
     //verify email login
-    authModel.validateLogIn({emailLogin: req.body.emailLoginReset}, (err, result) => {
+    authModel.validateLogIn({emailLogin: req.body.email}, (err, result) => {
 
-        //console.log('reset password - result: ', result);
+        console.log('reset password - result: ', result);
 
         if (err) {
             console.log('Error: ' + err);
@@ -86,7 +86,7 @@ exports.resetPassword = (req, res, next) => {
                 //console.log('reset password - newpassword: ', newpassword);
 
                 authModel.resetPassword({
-                    email: req.body.emailLoginReset,
+                    email: req.body.email,
                     password: newpassword
                 }, (err, result) => {
                     if (err) {

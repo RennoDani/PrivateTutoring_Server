@@ -66,9 +66,9 @@ exports.editUser = async (req, res, next) => {
     userModel.updateUser({
         iduser: req.body.idUser,
         name: req.body.nameUser,
-        //email: req.body.emailUser,
         phone: req.body.phoneUser,
-        datebirth: req.body.dateBirthUser
+        datebirth: req.body.dateBirthUser,
+        active: req.body.activeUser
     }, (err, result) => {
         if (err) {
             console.log('Error: ' + err);
@@ -88,26 +88,3 @@ exports.editUser = async (req, res, next) => {
     });
 }
 
-
-exports.delUser = async (req, res, next) => {
-
-console.log('delUser - id: ',req.params.id);
-
-    userModel.deleteUser(req.params.id, (err, result) => {
-        if (err) {
-            console.log('Error: ' + err);
-
-            return res.json({
-                message: err,
-                sucess: false
-            });
-
-        } else {
-
-            return res.json({
-                message: 'User successfully deleted!',
-                sucess: true
-            });
-        }
-    });
-}

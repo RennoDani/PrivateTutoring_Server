@@ -30,3 +30,28 @@ exports.addNewContact = (req, res, next) => {
 
     res.send();
 }
+
+
+
+exports.delContact = async (req, res, next) => {
+
+    console.log('delContact - id: ',req.params.id);
+    
+        userModel.deleteContact(req.params.id, (err, result) => {
+            if (err) {
+                console.log('Error: ' + err);
+    
+                return res.json({
+                    message: err,
+                    sucess: false
+                });
+    
+            } else {
+    
+                return res.json({
+                    message: 'Contact successfully deleted!',
+                    sucess: true
+                });
+            }
+        });
+    }

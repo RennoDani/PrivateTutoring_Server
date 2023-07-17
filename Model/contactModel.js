@@ -28,3 +28,19 @@ exports.addContacts = (contact) => {
     return db.query(query, values);
 
 }
+
+exports.deleteContact = (id, callback) => {
+    const query = 'DELETE FROM contact WHERE idcontact = ?';
+    const values = [id];
+
+    console.log('deleteContact - values: ',values);
+
+    db.query(query, values, function (err, result) {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, result);
+        }
+    });
+
+}

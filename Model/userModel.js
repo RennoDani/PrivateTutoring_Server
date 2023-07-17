@@ -1,7 +1,7 @@
 const db = require('../Util/database');
 
 exports.getAllUser = (callback) => {
-    const query = 'SELECT iduser, name, email, phone, DATE_FORMAT(datebirth, "%d-%m-%Y") as datebirth, profile FROM user';
+    const query = 'SELECT iduser, name, email, phone, DATE_FORMAT(datebirth, "%d-%m-%Y") as datebirth, profile, active FROM user';
 
     db.query(query, function (err, result) {
         if (err) {
@@ -14,12 +14,12 @@ exports.getAllUser = (callback) => {
 }
 
 exports.getIdUser = (id, callback) => {
-    const query = 'SELECT iduser, name, email, phone, DATE_FORMAT(datebirth, "%d-%m-%Y") as datebirth, profile FROM user WHERE user.iduser = ?';
+    const query = 'SELECT iduser, name, email, phone, DATE_FORMAT(datebirth, "%d-%m-%Y") as datebirth, profile, active FROM user WHERE user.iduser = ?';
     const values = [id];
 
     db.query(query, values, function (err, result) {
 
-console.log('user model - result: ',result);
+    //console.log('user model - result: ',result);
 
         if (err) {
             callback(err, null);
@@ -49,9 +49,9 @@ exports.insertUser = (user, callback) => {
 
 exports.updateUser = (user, callback) => {
     const query = 'UPDATE user ' +
-        ' SET name = COALESCE(?,name), phone = COALESCE(?,phone), datebirth = COALESCE(?,datebirth) ' +
+        ' SET name = COALESCE(?,name), phone = COALESCE(?,phone), datebirth = COALESCE(?,datebirth), active = COALESCE(?,active) ' +
         ' WHERE user.iduser = ?';
-    const values = [user.name, user.phone, user.datebirth, user.iduser];
+    const values = [user.name, user.phone, user.datebirth, user.active, user.iduser];
 
     console.log('updateuser - query: '+query);
 
@@ -66,21 +66,3 @@ exports.updateUser = (user, callback) => {
     });
 }
 
-
-exports.deleteUser = (id, callback) => {
-    const query = 'DELETE FROM user WHERE user.iduser = ?';
-    const values = [id];
-
-
-    // console.log('deleteUser - user.iduser: ',id);
-    // console.log('deleteUser - values: ',values);
-
-    db.query(query, values, function (err, result) {
-        if (err) {
-            callback(err, null);
-        } else {
-            callback(null, result);
-        }
-    });
-
-}
