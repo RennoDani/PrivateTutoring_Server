@@ -1,11 +1,32 @@
 const lessonModel = require('../Model/lessonModel');
 
 
+exports.getAllLesson = async (req, res, next) => {
+    lessonModel.getAllLesson((err, result) => {
+        if (err) {
+            console.log('Error: ' + err);
+        } else {
+            //console.log(' lessonModel.getAllLesson - result: ',result);
+            res.send(result);
+        }
+    });
+}
+
+exports.getIdLesson = async (req, res, next) => {
+    lessonModel.getIdLesson(req.params.id, (err, result) => {
+        if (err) {
+            console.log('Error: ' + err);
+        } else {
+            res.send(result);
+        }
+    });
+}
+
 exports.addNewLesson = async (req, res, next) => {
     console.log('add new lesson - ctrl');
 
-    console.log('add new lesson - ctrl - req.body: ',req.body);
-    console.log('add new lesson - ctrl - req.file: ',req.file);
+    console.log('add new lesson - ctrl - req.body: ', req.body);
+    console.log('add new lesson - ctrl - req.file: ', req.file);
 
 
 
@@ -35,23 +56,28 @@ exports.addNewLesson = async (req, res, next) => {
 
 }
 
-// const fs = require('fs');
-// const destinationPath = './PDF_fifles/';
 
-    // // Read the file using fs.readFile or any other method
-    // fs.readFile(req.body.filepath, (err, data) => {
-    //     if (err) {
-    //         console.error(err);
-    //         return res.status(500).send('Failed to read the PDF file');
-    //     }
 
-    //     // Save the file using fs.writeFile or any other method
-    //     fs.writeFile(destinationPath, data, err => {
-    //         if (err) {
-    //             console.error(err);
-    //             return res.status(500).send('Failed to save the PDF file');
-    //         }
+// -------------- Type ---------------------
+exports.getAllLessonType = async (req, res, next) => {
+    lessonModel.getAllLessonType((err, result) => {
+        if (err) {
+            console.log('Error: ' + err);
+        } else {
+            console.log(' lessonModel.getAllLessonType - result: ', result);
+            res.send(result);
+        }
+    });
+}
 
-    //         res.sendStatus(200);
-    //     });
-    // });
+
+// -------------- LEVEL ---------------------
+exports.getAllLessonLevel = async (req, res, next) => {
+    lessonModel.getAllLessonLevel((err, result) => {
+        if (err) {
+            console.log('Error: ' + err);
+        } else {
+            res.send(result);
+        }
+    });
+}
