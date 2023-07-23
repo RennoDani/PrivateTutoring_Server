@@ -23,12 +23,10 @@ exports.getIdLesson = async (req, res, next) => {
 }
 
 exports.addNewLesson = async (req, res, next) => {
-    console.log('add new lesson - ctrl');
+    //console.log('add new lesson - ctrl');
 
-    console.log('add new lesson - ctrl - req.body: ', req.body);
-    console.log('add new lesson - ctrl - req.file: ', req.file);
-
-
+    //console.log('add new lesson - ctrl - req.body: ', req.body);
+    //console.log('add new lesson - ctrl - req.file: ', req.file);
 
     lessonModel.insertLesson({
         title: req.body.title,
@@ -56,7 +54,35 @@ exports.addNewLesson = async (req, res, next) => {
 
 }
 
+exports.updateLesson = async (req, res, next) => {
 
+    console.log('add udpate lesson - ctrl - req.body: ', req.body);
+    console.log('add update lesson - ctrl - req.file: ', req.file);
+
+    lessonModel.updateLesson({
+        idlesson: req.body.idlesson,
+        title: req.body.title,
+        type: req.body.type,
+        level: req.body.level,
+        filepath: null//req.file.path
+    }, (err, result) => {
+        if (err) {
+            console.log('Error: ' + err);
+
+            return res.json({
+                message: err,
+                sucess: false
+            });
+
+        } else {
+
+            return res.json({
+                message: 'Lesson successfully updated!',
+                sucess: true
+            });
+        }
+    });
+}
 
 // -------------- Type ---------------------
 exports.getAllLessonType = async (req, res, next) => {
@@ -64,7 +90,7 @@ exports.getAllLessonType = async (req, res, next) => {
         if (err) {
             console.log('Error: ' + err);
         } else {
-            console.log(' lessonModel.getAllLessonType - result: ', result);
+            //console.log(' lessonModel.getAllLessonType - result: ', result);
             res.send(result);
         }
     });

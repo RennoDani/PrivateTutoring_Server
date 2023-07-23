@@ -5,7 +5,9 @@ exports.getAllLesson = (callback) => {
     const query = 'SELECT le.idlesson, le.title, lt.description as type, ll. description as level, le.filepath ' +
         ' FROM lesson le ' +
         ' JOIN lesson_type lt ON le.type = lt.type ' +
-        ' JOIN lesson_level ll ON le.level = ll.level ';
+        ' JOIN lesson_level ll ON le.level = ll.level '+
+        ' ORDER BY le.title ';
+
     db.query(query, function (err, result) {
         if (err) {
             callback(err, null);
@@ -46,11 +48,26 @@ exports.insertLesson = (lesson, callback) => {
 }
 
 
+exports.updateLesson = (lesson, callback) => {
+    const query = 'UPDATE lesson ' +
+        ' SET title = COALESCE(?,title), type = COALESCE(?,type), level = COALESCE(?,level), filepath = COALESCE(?,filepath) ' +
+        ' WHERE idlesson = ?';
+    const values = [lesson.title, lesson.type, lesson.level, lesson.filepath, lesson.idlesson];
+
+    db.query(query, values, function (err, result) {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, result);
+        }
+    });
+}
+
 
 // -------------- TYPE ---------------------
 exports.getAllLessonType = (callback) => {
     const query = 'SELECT type, description FROM lesson_type';
-    console.log('query - lesson type: ', query);
+    //console.log('query - lesson type: ', query);
     db.query(query, function (err, result) {
         if (err) {
             callback(err, null);
@@ -64,7 +81,7 @@ exports.getAllLessonType = (callback) => {
 // -------------- LEVEL ---------------------
 exports.getAllLessonLevel = (callback) => {
     const query = 'SELECT level, description FROM lesson_level ORDER BY ordem';
-    console.log('query - lesson level: ', query);
+    //console.log('query - lesson level: ', query);
     db.query(query, function (err, result) {
         if (err) {
             callback(err, null);

@@ -9,6 +9,7 @@ router.get('/Lesson/:id',lessonCtlr.getIdLesson);
 
 router.post('/Lesson',lessonCtlr.addNewLesson);
 
+router.put('/Lesson',lessonCtlr.updateLesson);
 
 //Lesson - Type
 router.get('/LessonType',lessonCtlr.getAllLessonType);
