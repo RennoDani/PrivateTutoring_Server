@@ -16,7 +16,7 @@ exports.getAllContacts = (req, res, next) => {
 }
 
 
-exports.addNewContact = (req, res, next) => {
+exports.addNewContact = async (req, res, next) => {
     //console.log('add - ctrl');
 
     //console.log(req.body);
@@ -26,9 +26,24 @@ exports.addNewContact = (req, res, next) => {
          email: req.body.emailContact,
          phone: req.body.phoneContact,
          message: req.body.messageContact
-     });
+     }, (err, result) => {
+        if (err) {
+            console.log('Error: ' + err);
 
-    res.send();
+            return res.json({
+                message: 'Problems sending this message.',
+                sucess: false
+            });
+
+        } else {
+            //console.log('Contact successfully saved!');
+
+            return res.json({                
+                message: 'Your message has been sent successfully!',
+                sucess: true
+            });
+        }
+    });
 }
 
 
