@@ -13,7 +13,7 @@ exports.getContacts = (callback) => {
     });
 }
 
-exports.addContacts = (contact) => {
+exports.addContacts = (contact, callback) => {
     //console.log('add - model');
     //const { name, email, phone, message } = req.body;
 
@@ -25,7 +25,14 @@ exports.addContacts = (contact) => {
     //console.log('contact - model: '+contact.name);
     //console.log('values - model: '+values);
 
-    return db.query(query, values);
+    db.query(query, values, function (err, result) {
+
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, result);
+        }
+    });
 
 }
 
