@@ -17,5 +17,8 @@ router.get('/LessonType',lessonCtlr.getAllLessonType);
 //Lesson - Level
 router.get('/LessonLevel',lessonCtlr.getAllLessonLevel);
 
+//Lesson - View PDF
+router.get('/LessonPDF/:namepdf',lessonCtlr.getPDF);
+
 
 module.exports = router;

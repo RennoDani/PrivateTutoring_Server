@@ -2,10 +2,10 @@ const db = require('../Util/database');
 
 
 exports.getAllLesson = (callback) => {
-    const query = 'SELECT le.idlesson, le.title, lt.description as type, ll. description as level, le.filepath ' +
+    const query = 'SELECT le.idlesson, le.title, le.type, lt.description as dstype, le.level, ll. description as dslevel, le.filepath ' +
         ' FROM lesson le ' +
         ' JOIN lesson_type lt ON le.type = lt.type ' +
-        ' JOIN lesson_level ll ON le.level = ll.level '+
+        ' JOIN lesson_level ll ON le.level = ll.level ' +
         ' ORDER BY le.title ';
 
     db.query(query, function (err, result) {
@@ -18,10 +18,10 @@ exports.getAllLesson = (callback) => {
 }
 
 exports.getIdLesson = (id, callback) => {
-    const query = 'SELECT le.idlesson, le.title, lt.description as type, ll. description as level, le.filepath ' +
+    const query = 'SELECT le.idlesson, le.title, le.type, lt.description as dstype, le.level, ll. description as dslevel, le.filepath ' +
         ' FROM lesson le ' +
         ' JOIN lesson_type lt ON le.type = lt.type ' +
-        ' JOIN lesson_level ll ON le.level = ll.level  '+
+        ' JOIN lesson_level ll ON le.level = ll.level  ' +
         ' WHERE le.idlesson = ? ';
     const values = [id];
 
@@ -49,10 +49,24 @@ exports.insertLesson = (lesson, callback) => {
 
 
 exports.updateLesson = (lesson, callback) => {
-    const query = 'UPDATE lesson ' +
-        ' SET title = COALESCE(?,title), type = COALESCE(?,type), level = COALESCE(?,level), filepath = COALESCE(?,filepath) ' +
+    let query;
+    let values;
+
+    if(lesson.filepath){
+        query = 'UPDATE lesson ' +
+        ' SET title = COALESCE(?,title) , type = COALESCE(?,type), level = COALESCE(?,level), filepath = COALESCE(?,filepath) ' +
         ' WHERE idlesson = ?';
-    const values = [lesson.title, lesson.type, lesson.level, lesson.filepath, lesson.idlesson];
+
+        values = [lesson.title, lesson.type, lesson.level, lesson.filepath, lesson.idlesson];
+
+    }else{
+        query = 'UPDATE lesson ' +
+        ' SET title = COALESCE(?,title) , type = COALESCE(?,type), level = COALESCE(?,level) ' +
+        ' WHERE idlesson = ?';
+
+        values = [lesson.title, lesson.type, lesson.level, lesson.idlesson];
+
+    }
 
     db.query(query, values, function (err, result) {
         if (err) {
@@ -61,6 +75,7 @@ exports.updateLesson = (lesson, callback) => {
             callback(null, result);
         }
     });
+
 }
 
 

@@ -56,15 +56,24 @@ exports.addNewLesson = async (req, res, next) => {
 
 exports.updateLesson = async (req, res, next) => {
 
-    console.log('add udpate lesson - ctrl - req.body: ', req.body);
-    console.log('add update lesson - ctrl - req.file: ', req.file);
+    //console.log('add udpate lesson - ctrl - req.body: ', req.body);
+    //console.log('add update lesson - ctrl - req.file: ', req.file);    
+
+    let filename;
+
+    if(req.file){
+        filename = req.file.path;
+    }
+    
+    //console.log('add update lesson - ctrl - filename: ', filename);
 
     lessonModel.updateLesson({
         idlesson: req.body.idlesson,
         title: req.body.title,
         type: req.body.type,
         level: req.body.level,
-        filepath: null//req.file.path
+        //filepath: req.file.path
+        filepath: filename
     }, (err, result) => {
         if (err) {
             console.log('Error: ' + err);
@@ -104,6 +113,32 @@ exports.getAllLessonLevel = async (req, res, next) => {
             console.log('Error: ' + err);
         } else {
             res.send(result);
+        }
+    });
+}
+
+
+// --------------- PDF -----------------------
+exports.getPDF = async (req, res, next) => {
+    const fs = require('fs');
+    const path = require('path');
+
+    const dirpath = 'C:/Daniela/MCIT/FinalProjectApp/PrivateTutoring/PrivateTutoring_Server/PDF_files';
+    const pdfPath = path.join(dirpath, req.params.namepdf);
+
+    //const pdfPath = path.join(__dirname, 'path/to/your/file.pdf');    
+
+    //console.log('getPDF - req.params.namepdf: ',req.params.namepdf);
+    console.log('get PDF - __dirname: ',__dirname);
+    console.log('getPDF - pdfPath: ',pdfPath);
+
+
+    fs.readFile(pdfPath, (err, data) => {
+        if (err) {
+            res.status(500).send('Erro ao ler o arquivo PDF.');
+        } else {
+            res.contentType('application/pdf');
+            res.send(data);
         }
     });
 }
