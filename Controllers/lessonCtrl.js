@@ -56,16 +56,18 @@ exports.addNewLesson = async (req, res, next) => {
 
 exports.updateLesson = async (req, res, next) => {
 
-    //console.log('add udpate lesson - ctrl - req.body: ', req.body);
+    console.log('add udpate lesson - ctrl - req.body: ', req.body);
     //console.log('add update lesson - ctrl - req.file: ', req.file);    
 
     let filename;
 
-    if(req.file){
+    if (req.file) {
         filename = req.file.path;
     }
-    
+
     //console.log('add update lesson - ctrl - filename: ', filename);
+
+    console.log('add update lesson 1 - req.body.title: ', req.body.title);
 
     lessonModel.updateLesson({
         idlesson: req.body.idlesson,
@@ -91,6 +93,8 @@ exports.updateLesson = async (req, res, next) => {
             });
         }
     });
+
+    console.log('add update lesson 2 - req.body.title: ', req.body.title);
 }
 
 // -------------- Type ---------------------
@@ -123,22 +127,19 @@ exports.getPDF = async (req, res, next) => {
     const fs = require('fs');
     const path = require('path');
 
-    const dirpath = 'C:/Daniela/MCIT/FinalProjectApp/PrivateTutoring/PrivateTutoring_Server/PDF_files';
-    const pdfPath = path.join(dirpath, req.params.namepdf);
-
-    //const pdfPath = path.join(__dirname, 'path/to/your/file.pdf');    
+    const pdfPath = path.join(__dirname, '../', 'PDF_files', req.params.namepdf);    
 
     //console.log('getPDF - req.params.namepdf: ',req.params.namepdf);
-    console.log('get PDF - __dirname: ',__dirname);
-    console.log('getPDF - pdfPath: ',pdfPath);
+    //console.log('get PDF - __dirname: ', __dirname);
+    //console.log('getPDF - pdfPath: ', pdfPath);
 
 
     fs.readFile(pdfPath, (err, data) => {
-        if (err) {
+        if (err) {            
             res.status(500).send('Erro ao ler o arquivo PDF.');
-        } else {
+        } else {            
             res.contentType('application/pdf');
-            res.send(data);
+            res.send(data);            
         }
     });
 }

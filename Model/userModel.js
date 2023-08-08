@@ -19,7 +19,7 @@ exports.getIdUser = (id, callback) => {
 
     db.query(query, values, function (err, result) {
 
-    //console.log('user model - result: ',result);
+        //console.log('user model - result: ',result);
 
         if (err) {
             callback(err, null);
@@ -27,7 +27,30 @@ exports.getIdUser = (id, callback) => {
             callback(null, result);
         }
     });
+}
 
+exports.getEmailUser = async (email) => {
+    const query = 'SELECT iduser, name, profile FROM user WHERE email = ?';
+    const values = [email];
+    const util = require('util');
+
+    const queryAsync = util.promisify(db.query).bind(db);
+
+    try {
+        const result = await queryAsync(query, values);
+        //console.log('user model - getEmailUser - result: ', result);
+        return result;
+    } catch (err) {
+        throw err;
+    }
+
+    // db.query(query, values, function (err, result){
+    //     if (err) {
+    //         return err;
+    //     } else {
+    //         return result;
+    //     }
+    // });
 }
 
 exports.insertUser = (user, callback) => {
@@ -53,9 +76,9 @@ exports.updateUser = (user, callback) => {
         ' WHERE user.iduser = ?';
     const values = [user.name, user.phone, user.datebirth, user.active, user.iduser];
 
-    console.log('updateuser - query: '+query);
+    //console.log('updateuser - query: ' + query);
 
-    console.log('updateuser - values: '+values);
+    //console.log('updateuser - values: ' + values);
 
     db.query(query, values, function (err, result) {
         if (err) {

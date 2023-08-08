@@ -3,15 +3,21 @@ const app = express();
 const cors = require('cors');
 const db = require('./Util/database');
 const multer = require('multer');
-const path = require('path');
 
 app.use(express.json());
 
 app.use(cors(
   {
-    origin: 'http://localhost:4200' // URL do seu aplicativo Angular    
+    origin: 'http://localhost:4200',
+    credentials: true // Isso permite incluir cookies e headers de autenticação na solicitação
   }));
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, DELETE, OPTIONS");
+  next();
+});
 
 const contactRoutes = require('./Routes/contactRoute');
 const userRoutes = require('./Routes/userRoute');
@@ -31,19 +37,6 @@ db.connect((err) => {
 ///// Middleware - Verify token
 console.log('Middleware ');
 
-// const authCtrl = require('./Controllers/authCtrl');
-// app.get('/protected-route', authCtrl.verifyToken, (req, res) => {
-
-//   console.log('Middleware - req.user: ', req.user);
-//   // Access the user information from req.user
-//   const userId = req.user.userId;
-//   const username = req.user.username;
-
-//   // Perform operations for the protected route
-//   // Example: Return a response with the user information
-//   res.json({ userId, username });
-
-// });
 
 
 //// PDF
@@ -62,7 +55,7 @@ const fileStorage = multer.diskStorage({
 //filepath from [lesson.filepath]
 app.use(
   multer({ storage: fileStorage }).single('filepath'),
-  express.static((__dirname, '/PDF_files'))  
+  express.static((__dirname, '/PDF_files'))
 );
 //express.static(path.join(__dirname, 'PDF_files'))
 

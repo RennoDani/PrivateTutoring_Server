@@ -2,7 +2,7 @@ const userModel = require('../Model/userModel');
 const authCtrl = require('./authCtrl');
 
 exports.getAllUser = (req, res, next) => {
-    
+
     //console.log('getAllUser - req ');
 
     userModel.getAllUser((err, result) => {
@@ -15,7 +15,7 @@ exports.getAllUser = (req, res, next) => {
 }
 
 exports.getIdUser = (req, res, next) => {
-    
+
     //console.log('getIdUser - req.params.id ',req.params.id);
 
     userModel.getIdUser(req.params.id, (err, result) => {
@@ -27,8 +27,9 @@ exports.getIdUser = (req, res, next) => {
     });
 }
 
+
 exports.addNewUser = async (req, res, next) => {
-console.log('addnewuser');
+    //console.log('addnewuser');
 
     userModel.insertUser({
         name: req.body.nameUser,
@@ -60,8 +61,8 @@ console.log('addnewuser');
 
 exports.editUser = async (req, res, next) => {
 
-    console.log('edit user - req params id: ',req.params);
-    console.log('edit user - req body: ',req.body);
+    //console.log('edit user - req params id: ', req.params);
+    //console.log('edit user - req body: ', req.body);
 
     userModel.updateUser({
         iduser: req.body.idUser,
@@ -75,14 +76,14 @@ exports.editUser = async (req, res, next) => {
 
             return res.json({
                 message: err,
-                sucess: false
+                success: false
             });
 
         } else {
 
             return res.json({
                 message: 'User successfully updated!',
-                sucess: true
+                success: true
             });
         }
     });
