@@ -12,6 +12,16 @@ exports.getAllLesson = async (req, res, next) => {
     });
 }
 
+exports.getAllUserLesson = async (req, res, next) => {
+    lessonModel.getAllUserLesson(req.params.iduser, (err, result) => {
+        if (err) {
+            console.log('Error: ' + err);
+        } else {
+            res.send(result);
+        }
+    });
+}
+
 exports.getIdLesson = async (req, res, next) => {
     lessonModel.getIdLesson(req.params.id, (err, result) => {
         if (err) {
@@ -73,8 +83,7 @@ exports.updateLesson = async (req, res, next) => {
         type: req.body.type,
         level: req.body.level,
         filepath: filename
-        //filepath: req.file.path //
-        
+        //filepath: req.file.path //verify before if has or not changes        
     }, (err, result) => {
         if (err) {
             console.log('Error: ' + err);
@@ -124,7 +133,7 @@ exports.getPDF = async (req, res, next) => {
     const fs = require('fs');
     const path = require('path');
 
-    const pdfPath = path.join(__dirname, '../', 'PDF_files', req.params.namepdf);    
+    const pdfPath = path.join(__dirname, '../', 'PDF_files', req.params.namepdf);
 
     //console.log('getPDF - req.params.namepdf: ',req.params.namepdf);
     //console.log('get PDF - __dirname: ', __dirname);
@@ -132,11 +141,11 @@ exports.getPDF = async (req, res, next) => {
 
 
     fs.readFile(pdfPath, (err, data) => {
-        if (err) {            
+        if (err) {
             res.status(500).send('Erro ao ler o arquivo PDF.');
-        } else {            
+        } else {
             res.contentType('application/pdf');
-            res.send(data);            
+            res.send(data);
         }
     });
 }

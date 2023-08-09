@@ -17,6 +17,25 @@ exports.getAllLesson = (callback) => {
     });
 }
 
+exports.getAllUserLesson = (iduser, callback) => {
+    const query = 'SELECT le.idlesson, le.title, le.type, lt.description as dstype, le.level, ll. description as dslevel, le.filepath ' +
+        ' FROM lesson le ' +
+        ' JOIN lesson_type lt ON le.type = lt.type ' +
+        ' JOIN lesson_level ll ON le.level = ll.level  ' +
+        ' JOIN lesson_user lu ON le.idlesson = lu.idlesson ' +
+        ' WHERE lu.iduser = ? ' +
+        ' ORDER BY le.title ';
+    const values = [iduser];
+
+    db.query(query, values, function (err, result) {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, result);
+        }
+    });
+}
+
 exports.getIdLesson = (id, callback) => {
     const query = 'SELECT le.idlesson, le.title, le.type, lt.description as dstype, le.level, ll. description as dslevel, le.filepath ' +
         ' FROM lesson le ' +

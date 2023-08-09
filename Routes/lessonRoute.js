@@ -7,6 +7,7 @@ const router = express.Router();
 //Lesson
 router.get('/Lesson', authCtrl.verifyToken, lessonCtlr.getAllLesson);
 router.get('/Lesson/:id', authCtrl.verifyToken, lessonCtlr.getIdLesson);
+router.get('/Lesson/student/:iduser', authCtrl.verifyToken, lessonCtlr.getAllUserLesson);
 
 router.post('/Lesson', authCtrl.verifyToken, lessonCtlr.addNewLesson);
 
