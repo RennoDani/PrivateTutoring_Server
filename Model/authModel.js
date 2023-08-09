@@ -21,7 +21,6 @@ exports.createLogin = (login) => {
 }
 
 exports.validateLogIn = (login, callback) => {
-
     //console.log('model - validateLogIn - login ',login);
 
     const query = 

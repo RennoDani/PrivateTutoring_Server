@@ -39,14 +39,14 @@ exports.addNewLesson = async (req, res, next) => {
 
             return res.json({
                 message: err,
-                sucess: false
+                success: false
             });
 
         } else {
 
             return res.json({
                 message: 'Lesson successfully saved!',
-                sucess: true
+                success: true
             });
         }
     });
@@ -56,7 +56,7 @@ exports.addNewLesson = async (req, res, next) => {
 
 exports.updateLesson = async (req, res, next) => {
 
-    console.log('add udpate lesson - ctrl - req.body: ', req.body);
+    //console.log('add udpate lesson - ctrl - req.body: ', req.body);
     //console.log('add update lesson - ctrl - req.file: ', req.file);    
 
     let filename;
@@ -67,34 +67,31 @@ exports.updateLesson = async (req, res, next) => {
 
     //console.log('add update lesson - ctrl - filename: ', filename);
 
-    console.log('add update lesson 1 - req.body.title: ', req.body.title);
-
     lessonModel.updateLesson({
         idlesson: req.body.idlesson,
         title: req.body.title,
         type: req.body.type,
         level: req.body.level,
-        //filepath: req.file.path
         filepath: filename
+        //filepath: req.file.path //
+        
     }, (err, result) => {
         if (err) {
             console.log('Error: ' + err);
 
             return res.json({
                 message: err,
-                sucess: false
+                success: false
             });
 
         } else {
 
             return res.json({
                 message: 'Lesson successfully updated!',
-                sucess: true
+                success: true
             });
         }
     });
-
-    console.log('add update lesson 2 - req.body.title: ', req.body.title);
 }
 
 // -------------- Type ---------------------

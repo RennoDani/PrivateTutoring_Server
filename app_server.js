@@ -34,10 +34,6 @@ db.connect((err) => {
 });
 
 
-///// Middleware - Verify token
-console.log('Middleware ');
-
-
 
 //// PDF
 const fileStorage = multer.diskStorage({

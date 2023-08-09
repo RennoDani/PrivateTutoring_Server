@@ -43,7 +43,7 @@ exports.addNewUser = async (req, res, next) => {
 
             return res.json({
                 message: err,
-                sucess: false
+                success: false
             });
 
         } else {
@@ -52,7 +52,7 @@ exports.addNewUser = async (req, res, next) => {
 
             return res.json({
                 message: 'User successfully saved!',
-                sucess: true
+                success: true
             });
         }
     });

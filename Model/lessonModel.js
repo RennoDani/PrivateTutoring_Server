@@ -52,20 +52,18 @@ exports.updateLesson = (lesson, callback) => {
     let query;
     let values;
 
-    if(lesson.filepath){
+    if (lesson.filepath) {
         query = 'UPDATE lesson ' +
-        ' SET title = COALESCE(?,title) , type = COALESCE(?,type), level = COALESCE(?,level), filepath = COALESCE(?,filepath) ' +
-        ' WHERE idlesson = ?';
+            ' SET title = COALESCE(?,title) , type = COALESCE(?,type), level = COALESCE(?,level), filepath = COALESCE(?,filepath) ' +
+            ' WHERE idlesson = ?';
 
         values = [lesson.title, lesson.type, lesson.level, lesson.filepath, lesson.idlesson];
-
-    }else{
+    } else {
         query = 'UPDATE lesson ' +
-        ' SET title = COALESCE(?,title) , type = COALESCE(?,type), level = COALESCE(?,level) ' +
-        ' WHERE idlesson = ?';
+            ' SET title = COALESCE(?,title) , type = COALESCE(?,type), level = COALESCE(?,level) ' +
+            ' WHERE idlesson = ?';
 
         values = [lesson.title, lesson.type, lesson.level, lesson.idlesson];
-
     }
 
     db.query(query, values, function (err, result) {

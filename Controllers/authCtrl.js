@@ -36,7 +36,12 @@ function generateToken(email) {
 exports.secretKey_auth = secretKey;
 
 exports.verifyToken = (req, res, next) => {
+    ///// Middleware - Verify token
+    console.log('Middleware - Verify token ');
+
     //const token = req.headers.authorization?.split(' ')[1];
+    const token = req.headers['x-access-token'];
+
     if (token) {
         jwt.verify(token, secretKey, (err, decodedToken) => {
             if (err) {

@@ -32,7 +32,7 @@ exports.addNewContact = async (req, res, next) => {
 
             return res.json({
                 message: 'Problems sending this message.',
-                sucess: false
+                success: false
             });
 
         } else {
@@ -40,7 +40,7 @@ exports.addNewContact = async (req, res, next) => {
 
             return res.json({                
                 message: 'Your message has been sent successfully!',
-                sucess: true
+                success: true
             });
         }
     });
@@ -58,14 +58,14 @@ exports.delContact = async (req, res, next) => {
     
                 return res.json({
                     message: err,
-                    sucess: false
+                    success: false
                 });
     
             } else {
     
                 return res.json({
                     message: 'Contact successfully deleted!',
-                    sucess: true
+                    success: true
                 });
             }
         });
