@@ -1,4 +1,5 @@
 const contactModel = require('../Model/contactModel');
+const email = require('../Util/email');
 
 
 exports.getAllContacts = (req, res, next) => {
@@ -36,7 +37,12 @@ exports.addNewContact = async (req, res, next) => {
             });
 
         } else {
-            //console.log('Contact successfully saved!');
+            
+            //console.log('email contact: ',req.body.emailContact);
+
+            const sendEmail = email.sendEmailContact(req.body.emailContact);
+
+            console.log('Contact successfully saved!');
 
             return res.json({                
                 message: 'Your message has been sent successfully!',
