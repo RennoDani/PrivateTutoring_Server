@@ -1,12 +1,16 @@
 const db = require('../Util/database');
 
-exports.resetPassword = (login) => {
+exports.resetPassword = (login, callback) => {
     const query = 'UPDATE login SET password = ? WHERE email = ?';
     const values = [login.password, login.email];
 
-    //console.log('user model - reset - values: ',values);
-    //console.log('user model - reset - login.password: ',login.password);
-    return db.query(query, values);
+    db.query(query, values, function (err, result) {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, result);
+        }
+    });
 
 }
 
@@ -14,10 +18,7 @@ exports.createLogin = (login) => {
     const query = 'INSERT INTO login (email, password) VALUES (?,?)';
     const values = [login.email, login.password];
 
-    //console.log('user model - createLogin - values: ',values);
-    //console.log('user model - createLogin - login.password: ',login.password);
     return db.query(query, values);
-
 }
 
 exports.validateLogIn = (login, callback) => {

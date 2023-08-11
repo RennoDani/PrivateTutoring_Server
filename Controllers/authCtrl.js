@@ -3,12 +3,14 @@ const secretKey = 'my-first-project-angular-nodejs';
 const authModel = require('../Model/authModel');
 const userModel = require('../Model/userModel');
 const bcryptjs = require('bcryptjs');
+const sendemail = require('../Util/email');
 
+let pass = '';
 
 //generate and encrypt password 
 function generatePassword() {
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let pass = '';
+    
 
     for (let i = 0; i < 6; i++) {
         const indice = Math.floor(Math.random() * caracteres.length);
@@ -62,12 +64,15 @@ exports.verifyToken = (req, res, next) => {
 exports.createLogin = (email) => {
     const newpassword = generatePassword();
 
-    console.log('createLogin - newpassword: ', newpassword);
+    //console.log('createLogin - newpassword: ', newpassword);
 
     authModel.createLogin({
         email: email,
         password: newpassword
-    });
+    });    
+    
+    sendemail.sendEmailUser({email_user: email, pass_user: pass});       
+    
 }
 
 exports.resetPassword = (req, res, next) => {
@@ -98,6 +103,7 @@ exports.resetPassword = (req, res, next) => {
                     email: req.body.email,
                     password: newpassword
                 }, (err, result) => {
+
                     if (err) {
                         console.log('Error - Reset Password: ' + err);
 
@@ -106,6 +112,9 @@ exports.resetPassword = (req, res, next) => {
                             success: false
                         });
                     } else {
+
+                        sendemail.sendEmailResetPassword({email_user: req.body.email, pass_user: pass}); 
+
                         return res.json({
                             message: 'Successfully reset password! Verify your email box.',
                             success: true
