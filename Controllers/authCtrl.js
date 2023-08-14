@@ -82,7 +82,7 @@ exports.resetPassword = (req, res, next) => {
     //verify email login
     authModel.validateLogIn({ emailLogin: req.body.email }, (err, result) => {
 
-        console.log('reset password - result: ', result);
+        //console.log('reset password - result: ', result);
 
         if (err) {
             console.log('Error: ' + err);
@@ -114,6 +114,8 @@ exports.resetPassword = (req, res, next) => {
                     } else {
 
                         sendemail.sendEmailResetPassword({email_user: req.body.email, pass_user: pass}); 
+
+                        //console.log('after sendemail reset password');
 
                         return res.json({
                             message: 'Successfully reset password! Verify your email box.',
@@ -218,5 +220,11 @@ exports.validateLogIn = async (req, res, next) => {
 }
 
 exports.logOut = async (req, res, next) => {
+    
     res.end();
+
+    // return res.json({
+    //     message: 'You have logged out of the system!',
+    //     success: true
+    // });
 }

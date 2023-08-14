@@ -1,7 +1,7 @@
 const db = require('../Util/database');
 
 exports.getAllUser = (callback) => {
-    const query = 'SELECT iduser, name, email, phone, DATE_FORMAT(datebirth, "%d-%m-%Y") as datebirth, profile, active FROM user';
+    const query = 'SELECT iduser, name, email, phone, DATE_FORMAT(datebirth, "%Y-%m-%d") as datebirth, profile, active FROM user';
 
     db.query(query, function (err, result) {
         if (err) {
@@ -14,7 +14,7 @@ exports.getAllUser = (callback) => {
 }
 
 exports.getIdUser = (id, callback) => {
-    const query = 'SELECT iduser, name, email, phone, DATE_FORMAT(datebirth, "%d-%m-%Y") as datebirth, profile, active FROM user WHERE user.iduser = ?';
+    const query = 'SELECT iduser, name, email, phone, DATE_FORMAT(datebirth, "%Y-%m-%d") as datebirth, profile, active FROM user WHERE user.iduser = ?';
     const values = [id];
 
     db.query(query, values, function (err, result) {
@@ -71,13 +71,13 @@ exports.insertUser = (user, callback) => {
 }
 
 exports.updateUser = (user, callback) => {
+   
     const query = 'UPDATE user ' +
-        ' SET name = COALESCE(?,name), phone = COALESCE(?,phone), datebirth = COALESCE(?,datebirth), active = COALESCE(?,active) ' +
+        ' SET name = COALESCE(?,name), phone = COALESCE(?,phone), datebirth = COALESCE(?, datebirth), active = COALESCE(?,active) ' +        
         ' WHERE user.iduser = ?';
     const values = [user.name, user.phone, user.datebirth, user.active, user.iduser];
 
     //console.log('updateuser - query: ' + query);
-
     //console.log('updateuser - values: ' + values);
 
     db.query(query, values, function (err, result) {

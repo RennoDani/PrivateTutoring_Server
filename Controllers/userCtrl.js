@@ -42,7 +42,7 @@ exports.addNewUser = async (req, res, next) => {
             console.log('Error: ' + err);
 
             return res.json({
-                message: err,
+                message: '' + err,
                 success: false
             });
 
@@ -68,14 +68,14 @@ exports.editUser = async (req, res, next) => {
         iduser: req.body.idUser,
         name: req.body.nameUser,
         phone: req.body.phoneUser,
-        datebirth: req.body.dateBirthUser,
+        datebirth: req.body.dateBirthUser,        
         active: req.body.activeUser
     }, (err, result) => {
         if (err) {
             console.log('Error: ' + err);
 
             return res.json({
-                message: err,
+                message: '' + err,
                 success: false
             });
 
