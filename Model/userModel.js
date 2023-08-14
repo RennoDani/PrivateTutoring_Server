@@ -1,7 +1,7 @@
 const db = require('../Util/database');
 
 exports.getAllUser = (callback) => {
-    const query = 'SELECT iduser, name, email, phone, DATE_FORMAT(datebirth, "%Y-%m-%d") as datebirth, profile, active FROM user';
+    const query = 'SELECT iduser, name, email, phone, DATE_FORMAT(datebirth, "%Y-%m-%d") as datebirth, profile, CASE active WHEN "Y" THEN "Yes" WHEN "N" THEN "No" END AS active FROM user';
 
     db.query(query, function (err, result) {
         if (err) {
