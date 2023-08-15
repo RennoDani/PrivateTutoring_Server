@@ -32,6 +32,7 @@ exports.getIdLesson = async (req, res, next) => {
     });
 }
 
+
 exports.addNewLesson = async (req, res, next) => {
     //console.log('add new lesson - ctrl');
 
@@ -48,7 +49,7 @@ exports.addNewLesson = async (req, res, next) => {
             console.log('Error: ' + err);
 
             return res.json({
-                message: err,
+                message: '' + err,
                 success: false
             });
 
@@ -60,9 +61,8 @@ exports.addNewLesson = async (req, res, next) => {
             });
         }
     });
-
-
 }
+
 
 exports.updateLesson = async (req, res, next) => {
 
@@ -89,7 +89,7 @@ exports.updateLesson = async (req, res, next) => {
             console.log('Error: ' + err);
 
             return res.json({
-                message: err,
+                message: '' + err,
                 success: false
             });
 
@@ -97,6 +97,74 @@ exports.updateLesson = async (req, res, next) => {
 
             return res.json({
                 message: 'Lesson successfully updated!',
+                success: true
+            });
+        }
+    });
+}
+
+
+// -------------- LESSON USER -----------------
+//List Students in Id Lesson
+exports.getStudentByIdLesson = async (req, res, next) => {
+    lessonModel.getStudentByIdLesson(req.params.idlesson, (err, result) => {
+        if (err) {
+            console.log('Error: ' + err);
+        } else {
+            res.send(result);
+        }
+    });
+}
+
+//List Other Students who are not in this Id Lesson 
+exports.getOtherStudentsByIdLesson = async (req, res, next) => {
+    lessonModel.getOtherStudentsByIdLesson(req.params.idlesson, (err, result) => {
+        if (err) {
+            console.log('Error: ' + err);
+        } else {
+            res.send(result);
+        }
+    });
+}
+
+exports.addLessonStudent = async (req, res, next) => {
+    //console.log('addLessonStudent - req.body: ',req.body);
+    lessonModel.insertLessonStudent({
+        idlesson: req.body.idlesson,
+        iduser: req.body.iduser
+    }, (err, result) => {
+        if (err) {
+            console.log('Error: ' + err);
+
+            return res.json({
+                message: '' + err,
+                success: false
+            });
+        } else {
+            return res.json({
+                message: 'Student added successfully!',
+                success: true
+            });
+        }
+    });
+}
+
+exports.deleteLessonStudent = async(req, res, next) => {
+    //console.log('deleteLessonStudent - req.params: ',req.params);
+    lessonModel.deleteLessonStudent({
+        idlesson: req.params.idlesson,
+        iduser: req.params.iduser
+    }, (err, result) => {
+        if (err) {
+            console.log('Error: ' + err);
+
+            return res.json({
+                message: '' + err,
+                success: false
+            });
+        } else {
+            return res.json({
+                message: 'Student deleted successfully!',
                 success: true
             });
         }

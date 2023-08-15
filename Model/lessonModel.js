@@ -36,13 +36,13 @@ exports.getAllUserLesson = (iduser, callback) => {
     });
 }
 
-exports.getIdLesson = (id, callback) => {
+exports.getIdLesson = (idlesson, callback) => {
     const query = 'SELECT le.idlesson, le.title, le.type, lt.description as dstype, le.level, ll. description as dslevel, le.filepath ' +
         ' FROM lesson le ' +
         ' JOIN lesson_type lt ON le.type = lt.type ' +
         ' JOIN lesson_level ll ON le.level = ll.level  ' +
         ' WHERE le.idlesson = ? ';
-    const values = [id];
+    const values = [idlesson];
 
     db.query(query, values, function (err, result) {
         if (err) {
@@ -52,6 +52,7 @@ exports.getIdLesson = (id, callback) => {
         }
     });
 }
+
 
 exports.insertLesson = (lesson, callback) => {
     const query = 'INSERT INTO lesson (title, type, level, filepath) VALUES (?,?,?,?)';
@@ -95,6 +96,71 @@ exports.updateLesson = (lesson, callback) => {
 
 }
 
+
+
+// -------------- LESSON USER -----------------
+exports.getStudentByIdLesson = (idlesson, callback) => {
+    const query = 'SELECT lu.idlesson, lu.iduser, u.name, u.email '+
+        ' FROM lesson_user lu '+
+        ' JOIN user u ON lu.iduser = u.iduser '+
+        ' WHERE lu.idlesson = ? ';
+    const values = [idlesson];
+
+    db.query(query, values, function (err, result) {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, result);
+        }
+    });
+}
+
+
+exports.getOtherStudentsByIdLesson = (idlesson, callback) => {
+    const query = 'SELECT u.iduser, u.name, u.email '+
+        ' FROM user u '+
+        ' WHERE u.iduser NOT IN (SELECT lu.iduser FROM lesson_user lu WHERE lu.idlesson = ?)  '+
+        ' AND u.profile = "student" '+
+        ' AND u.active = "Y" ';
+    const values = [idlesson];
+
+    db.query(query, values, function (err, result) {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, result);
+        }
+    });
+}
+
+
+exports.insertLessonStudent = (lessonUser, callback) => {
+    //console.log('model - insertLessonStudent - lessonUser: ',lessonUser);
+
+    const query = 'INSERT INTO lesson_user (idlesson, iduser) VALUES (?,?)';
+    const values = [lessonUser.idlesson, lessonUser.iduser];
+
+    db.query(query, values, function (err, result) {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, result);
+        }
+    });
+}
+
+exports.deleteLessonStudent = (lessonUser, callback) => {
+    const query = 'DELETE FROM lesson_user WHERE idlesson = ? AND iduser = ? ';
+    const values = [lessonUser.idlesson, lessonUser.iduser];
+
+    db.query(query, values, function (err, result) {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, result);
+        }
+    });
+}
 
 // -------------- TYPE ---------------------
 exports.getAllLessonType = (callback) => {
