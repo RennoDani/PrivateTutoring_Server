@@ -14,6 +14,7 @@ router.get('/Lesson/student/:iduser', authCtrl.verifyToken, lessonCtlr.getAllUse
 
 router.post('/Lesson', authCtrl.verifyToken, lessonCtlr.addNewLesson);
 router.put('/Lesson', authCtrl.verifyToken, lessonCtlr.updateLesson);
+router.delete('/Lesson/:idlesson/:namepdf', authCtrl.verifyToken, lessonCtlr.deleteLesson);
 
 
 //Lesson - View PDF

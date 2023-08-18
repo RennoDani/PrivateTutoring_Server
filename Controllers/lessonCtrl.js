@@ -1,5 +1,6 @@
 const lessonModel = require('../Model/lessonModel');
-
+const fs = require('fs');
+const path = require('path');
 
 exports.getAllLesson = async (req, res, next) => {
     lessonModel.getAllLesson((err, result) => {
@@ -103,6 +104,41 @@ exports.updateLesson = async (req, res, next) => {
     });
 }
 
+exports.deleteLesson = async (req, res, next) => {
+
+    // console.log('delete lesson - req.params.idlesson: ', req.params.idlesson);
+    // console.log('delete lesson - req.params.namepdf: ', req.params.namepdf);
+
+
+    const pdfPath = path.join(__dirname, '../', 'PDF_files', req.params.namepdf);
+
+    fs.unlink(pdfPath, (err) => {
+        if (err) {
+            console.log('Error: ' + err);
+
+            return res.json({
+                message: 'Error deleting file. ' + err,
+                success: false
+            });
+        } else {
+            lessonModel.deleteLesson(req.params.idlesson, (err, result) => {
+                if (err) {
+                    console.log('Error: ' + err);
+
+                    return res.json({
+                        message: '' + err,
+                        success: false
+                    });
+                } else {
+                    return res.json({
+                        message: 'Lesson and students for this lesson have been successfully deleted!',
+                        success: true
+                    });
+                }
+            });
+        }
+    });
+}
 
 // -------------- LESSON USER -----------------
 //List Students in Id Lesson
@@ -149,7 +185,7 @@ exports.addLessonStudent = async (req, res, next) => {
     });
 }
 
-exports.deleteLessonStudent = async(req, res, next) => {
+exports.deleteLessonStudent = async (req, res, next) => {
     //console.log('deleteLessonStudent - req.params: ',req.params);
     lessonModel.deleteLessonStudent({
         idlesson: req.params.idlesson,
@@ -164,7 +200,7 @@ exports.deleteLessonStudent = async(req, res, next) => {
             });
         } else {
             return res.json({
-                message: 'Student deleted successfully!',
+                message: 'The student for this lesson has been successfully deleted!',
                 success: true
             });
         }
@@ -198,8 +234,6 @@ exports.getAllLessonLevel = async (req, res, next) => {
 
 // --------------- PDF -----------------------
 exports.getPDF = async (req, res, next) => {
-    const fs = require('fs');
-    const path = require('path');
 
     const pdfPath = path.join(__dirname, '../', 'PDF_files', req.params.namepdf);
 

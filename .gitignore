@@ -2,6 +2,8 @@
 
 #pdf files
 /PDF_files
+/Util
+/database
 
 # Compiled output
 /dist

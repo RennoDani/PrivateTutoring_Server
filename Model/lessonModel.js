@@ -96,13 +96,59 @@ exports.updateLesson = (lesson, callback) => {
 
 }
 
+exports.deleteLesson = (idlesson, callback) => {
+    db.beginTransaction((err) => {
+        const query1 = 'DELETE FROM lesson_user WHERE idlesson = ? ';
+        const query2 = 'DELETE FROM lesson WHERE idlesson = ? ';
+
+        const values = [idlesson];
+        //console.log('values: ', values);
+
+        db.query(query1, values, function (err) {
+            //console.log('query1: ', query1);
+            if (err) {
+                db.rollback(() => {
+                    console.error('Error delete student lesson: ', err);
+                    db.end();
+                    callback(err, null);
+                });
+            } else {
+                db.query(query2, values, function (err, result2) {
+                    //console.log('query2: ', query2);
+                    //console.log('result2: ', result2);
+
+                    if (err || result2.affectedRows === 0) {
+                        db.rollback(() => {
+                            console.error('Error delete lesson: ', err);
+                            db.end();
+                            callback(err, null);
+                        });
+                    } else {
+                        db.commit((err) => {
+                            //console.log('commit - result2 ', result2);
+                            if (err) {
+                                db.rollback(() => {
+                                    console.error('Error - commit lesson: ', err);
+                                    db.end();
+                                });
+                                callback(err, null);
+                            } else {
+                                callback(null, result2);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+}
 
 
 // -------------- LESSON USER -----------------
 exports.getStudentByIdLesson = (idlesson, callback) => {
-    const query = 'SELECT lu.idlesson, lu.iduser, u.name, u.email '+
-        ' FROM lesson_user lu '+
-        ' JOIN user u ON lu.iduser = u.iduser '+
+    const query = 'SELECT lu.idlesson, lu.iduser, u.name, u.email ' +
+        ' FROM lesson_user lu ' +
+        ' JOIN user u ON lu.iduser = u.iduser ' +
         ' WHERE lu.idlesson = ? ';
     const values = [idlesson];
 
@@ -117,10 +163,10 @@ exports.getStudentByIdLesson = (idlesson, callback) => {
 
 
 exports.getOtherStudentsByIdLesson = (idlesson, callback) => {
-    const query = 'SELECT u.iduser, u.name, u.email '+
-        ' FROM user u '+
-        ' WHERE u.iduser NOT IN (SELECT lu.iduser FROM lesson_user lu WHERE lu.idlesson = ?)  '+
-        ' AND u.profile = "student" '+
+    const query = 'SELECT u.iduser, u.name, u.email ' +
+        ' FROM user u ' +
+        ' WHERE u.iduser NOT IN (SELECT lu.iduser FROM lesson_user lu WHERE lu.idlesson = ?)  ' +
+        ' AND u.profile = "student" ' +
         ' AND u.active = "Y" ';
     const values = [idlesson];
 
